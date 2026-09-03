@@ -1,6 +1,4 @@
-from pathlib import Path
-
-html = r'''<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -66,6 +64,16 @@ h1{font-size:clamp(3.3rem,7vw,6.5rem);line-height:.94;letter-spacing:-.075em;max
 .btn.primary{background:var(--text);color:#070918;font-weight:800}
 .btn.secondary{background:var(--glass);color:var(--text)}
 .btn:hover{transform:translateY(-4px);box-shadow:0 15px 35px rgba(0,0,0,.25);border-color:rgba(255,255,255,.25)}
+
+.profile-wrap{display:flex;justify-content:center;align-items:center;margin-bottom:24px}
+.profile-ring{width:178px;height:178px;border-radius:50%;padding:5px;background:linear-gradient(135deg,rgba(124,140,255,.95),rgba(85,230,193,.85),rgba(192,132,252,.8));box-shadow:0 0 55px rgba(124,140,255,.22),0 18px 50px rgba(0,0,0,.35)}
+.profile-photo{width:100%;height:100%;object-fit:cover;border-radius:50%;border:3px solid rgba(7,9,24,.8);display:block}
+.hero-intro{display:grid;grid-template-columns:auto 1fr;gap:24px;align-items:center}
+.github-badge{display:inline-flex;align-items:center;gap:8px;margin-top:14px;color:#dce3f8;font-size:.84rem}.github-badge:hover{color:var(--accent2)}
+.project-grid-wide{grid-template-columns:repeat(3,1fr)}
+.project.featured{grid-column:span 2}.project.aiops{background:linear-gradient(145deg,rgba(124,140,255,.12),rgba(85,230,193,.055))}
+.ai-flow{display:flex;flex-wrap:wrap;gap:7px;margin-top:18px}.ai-flow span{font-family:ui-monospace,monospace;font-size:.72rem;padding:7px 9px;border:1px solid var(--line);border-radius:10px;background:rgba(0,0,0,.16)}
+@media(max-width:850px){.hero-intro{grid-template-columns:1fr}.profile-wrap{justify-content:flex-start}.project-grid-wide{grid-template-columns:1fr}.project.featured{grid-column:span 1}}
 .hero-card{
   position:relative;min-height:390px;border:1px solid var(--line);border-radius:32px;background:linear-gradient(145deg,rgba(255,255,255,.11),rgba(255,255,255,.035));
   backdrop-filter:blur(18px);box-shadow:var(--shadow);padding:25px;overflow:hidden;transform:rotate(2deg);
@@ -126,9 +134,9 @@ footer{padding:35px 0 50px;color:#727c9a;font-size:.82rem;text-align:center}
 
 <nav class="nav">
   <div class="nav-inner">
-    <a class="logo" href="#top">MK<span>.</span></a>
+    <a class="logo" href="#top">Manish Kumar Vishwakarma<span>.</span></a>
     <div class="nav-links">
-      <a href="#about">About</a><a href="#experience">Experience</a><a href="#projects">Projects</a><a href="#skills">Skills</a>
+      <a href="#about">About</a><a href="#experience">Experience</a><a href="#projects">Projects</a><a href="#skills">Skills</a><a href="https://github.com/manishvishwakarma89" target="_blank" rel="noopener">GitHub ↗</a>
     </div>
     <a class="nav-cta" href="#contact">Let's connect</a>
   </div>
@@ -138,14 +146,20 @@ footer{padding:35px 0 50px;color:#727c9a;font-size:.82rem;text-align:center}
 <section class="hero">
   <div class="container hero-grid">
     <div class="reveal">
-      <div class="eyebrow"><span class="dot"></span> AWS Cloud & DevOps Engineer · Delhi NCR</div>
+      <div class="hero-intro">
+        <div class="profile-wrap"><div class="profile-ring"><img class="profile-photo" src="images/manish-profile.png" alt="Manish Kumar Vishwakarma"></div></div>
+        <div><div class="eyebrow"><span class="dot"></span> AWS Cloud & DevOps Engineer · Delhi NCR</div>
+        <div style="color:var(--muted);font-size:.92rem">AWS Certified Solutions Architect · Cloud Support · DevOps · AIOps</div></div>
+      </div>
       <h1>Cloud infrastructure that <span class="gradient">ships.</span></h1>
-      <p>AWS Certified Solutions Architect focused on scalable cloud infrastructure, Kubernetes, Docker, Terraform, CI/CD and reliable production systems.</p>
+      <p>Building scalable AWS infrastructure, Kubernetes platforms, CI/CD pipelines and AI-powered operations that make systems more reliable, observable and easier to operate.</p>
       <div class="actions">
         <a class="btn primary" href="#projects">Explore my work ↗</a>
         <a class="btn secondary" href="mailto:manish2801kumar@gmail.com">Email me</a>
         <a class="btn secondary" href="https://www.linkedin.com/in/mkkumar88/" target="_blank" rel="noopener">LinkedIn ↗</a>
+        <a class="btn secondary" href="https://github.com/manishvishwakarma89" target="_blank" rel="noopener">GitHub ↗</a>
       </div>
+      <a class="github-badge" href="https://github.com/manishvishwakarma89" target="_blank" rel="noopener">⌘ github.com/manishvishwakarma89 →</a>
     </div>
     <div class="hero-card reveal">
       <div class="terminal">
@@ -219,12 +233,17 @@ footer{padding:35px 0 50px;color:#727c9a;font-size:.82rem;text-align:center}
 
 <section id="projects">
 <div class="container">
-  <div class="section-head reveal"><div><div class="kicker">03 / Selected work</div><h2>Projects built<br>to prove it.</h2></div><p>Production-minded projects spanning cloud, containers, GitOps, CI/CD and application infrastructure.</p></div>
-  <div class="projects">
-    <article class="glass project reveal"><span class="project-number">01 · LMS / 3-TIER</span><h3>RCMOOCS Learning Management System</h3><p>Django-based LMS deployed with Docker and Kubernetes, with GitHub Actions CI/CD, Prometheus and Grafana for delivery and observability.</p><div class="skills"><span class="chip">Django</span><span class="chip">Docker</span><span class="chip">Kubernetes</span><span class="chip">CI/CD</span></div></article>
-    <article class="glass project reveal"><span class="project-number">02 · BANKING / MICROSERVICES</span><h3>AI BankApp</h3><p>Three-tier application architecture designed around containerization, Kubernetes, GitOps deployment, load balancing and resilient application delivery.</p><div class="skills"><span class="chip">Docker</span><span class="chip">Kubernetes</span><span class="chip">GitOps</span><span class="chip">Load Balancing</span></div></article>
-    <article class="glass project reveal"><span class="project-number">03 · ERP / AWS</span><h3>Production-ready Odoo 19 Architecture</h3><p>A production-focused AWS architecture concept emphasizing high availability, security, scalability, DevOps and GitOps practices.</p><div class="skills"><span class="chip">AWS</span><span class="chip">RDS</span><span class="chip">ALB</span><span class="chip">EFS</span><span class="chip">WAF</span></div></article>
-    <article class="glass project reveal"><span class="project-number">04 · AUTOMATION / IAC</span><h3>Cloud Automation & DevSecOps</h3><p>Reusable infrastructure and delivery workflows using Terraform, GitHub Actions and security tooling to automate provisioning, testing and deployment.</p><div class="skills"><span class="chip">Terraform</span><span class="chip">GitHub Actions</span><span class="chip">Trivy</span><span class="chip">Gitleaks</span></div></article>
+  <div class="section-head reveal"><div><div class="kicker">03 / Selected work</div><h2>Projects built<br>to prove it.</h2></div><p>Hands-on work across AWS infrastructure, three-tier applications, Kubernetes, MERN, Jenkins CI, Argo CD GitOps, observability and AI-powered operations.</p></div>
+  <div class="projects project-grid-wide">
+    <article class="glass project aiops featured reveal"><span class="project-number">01 · AIOPS / AGENTS / LOCAL K8S</span><h3>AI Ops — Kubernetes & Docker Troubleshooting Agent</h3><p>Built a LangChain agent using a local LLM through Ollama to answer Kubernetes and Docker questions by calling real <b>kubectl</b> and <b>docker</b> commands as tools. Extended the concept toward agents that diagnose cluster health and automate repair workflows on local Kind or Minikube environments.</p><div class="ai-flow"><span>User</span><span>→</span><span>LangChain Agent</span><span>→</span><span>Ollama / Local LLM</span><span>→</span><span>kubectl / docker</span><span>→</span><span>Diagnose</span><span>→</span><span>Repair</span></div><div class="skills"><span class="chip">LangChain</span><span class="chip">Ollama</span><span class="chip">Kubernetes</span><span class="chip">Kind</span><span class="chip">Minikube</span><span class="chip">Docker</span><span class="chip">AIOps</span></div></article>
+    <article class="glass project reveal"><span class="project-number">02 · LMS / 3-TIER</span><h3>RCMOOCS Learning Management System</h3><p>Django-based LMS deployed with Docker and Kubernetes, with GitHub Actions CI/CD, Prometheus and Grafana for delivery, monitoring and observability.</p><div class="skills"><span class="chip">Django</span><span class="chip">Docker</span><span class="chip">Kubernetes</span><span class="chip">CI/CD</span></div></article>
+    <article class="glass project reveal"><span class="project-number">03 · BANKING / 3-TIER</span><h3>AI BankApp</h3><p>Three-tier banking application architecture built around Docker and Kubernetes with GitOps delivery, load balancing and resilient application deployment.</p><div class="skills"><span class="chip">Docker</span><span class="chip">Kubernetes</span><span class="chip">GitOps</span><span class="chip">Load Balancing</span></div></article>
+    <article class="glass project reveal"><span class="project-number">04 · TRAVEL / MERN / EKS</span><h3>Wanderlust Travel — End-to-End MERN on EKS</h3><p>Deployed an end-to-end three-tier MERN stack travel application on an Amazon EKS cluster. Built the CI pipeline with Jenkins and implemented continuous delivery with Argo CD, following a GitOps-based deployment workflow.</p><div class="ai-flow"><span>Git</span><span>→</span><span>Jenkins CI</span><span>→</span><span>Container Images</span><span>→</span><span>EKS</span><span>←</span><span>Argo CD</span></div><div class="skills"><span class="chip">MongoDB</span><span class="chip">Express</span><span class="chip">React</span><span class="chip">Node.js</span><span class="chip">AWS EKS</span><span class="chip">Jenkins</span><span class="chip">Argo CD</span><span class="chip">GitOps</span></div></article>
+    
+    
+    
+    <article class="glass project reveal"><span class="project-number">06 · CLOUD / AUTOMATION</span><h3>SkillPulse Go</h3><p>Cloud-oriented application project focused on automation, reliability and production-ready deployment practices.</p><div class="skills"><span class="chip">Cloud</span><span class="chip">Automation</span><span class="chip">DevOps</span></div></article>
+    <article class="glass project reveal"><span class="project-number">07 · DEVSECOPS / IAC</span><h3>Cloud Automation & DevSecOps</h3><p>Reusable infrastructure and delivery workflows using Terraform, GitHub Actions and security tooling to automate provisioning, validation and deployment.</p><div class="skills"><span class="chip">Terraform</span><span class="chip">GitHub Actions</span><span class="chip">Trivy</span><span class="chip">Gitleaks</span></div></article>
   </div>
 </div>
 </section>
@@ -275,8 +294,3 @@ document.querySelectorAll('.glass').forEach(card=>{
 </script>
 </body>
 </html>
-'''
-
-path = Path("/mnt/data/manish-portfolio.html")
-path.write_text(html, encoding="utf-8")
-print(path)
