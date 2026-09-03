@@ -1,857 +1,282 @@
-<!doctype html>
+from pathlib import Path
+
+html = r'''<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Shubham Londhe • TrainWithShubham</title>
-  <meta name="description" content="Developer Advocate • DevOps • AWS • Kubernetes • Agentic AI. Building TrainWithShubham." />
-  <meta name="theme-color" content="#0b0f19" />
-  <style>
-    /* ---------- Reset / Base ---------- */
-    *, *::before, *::after { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body {
-      margin: 0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
-      color: rgba(255,255,255,0.88);
-      background: radial-gradient(1200px 800px at 10% 10%, rgba(255,120,0,.20), transparent 60%),
-                  radial-gradient(1000px 700px at 90% 20%, rgba(70,160,255,.20), transparent 55%),
-                  radial-gradient(900px 700px at 60% 95%, rgba(160,70,255,.18), transparent 55%),
-                  linear-gradient(180deg, #060914 0%, #070a16 35%, #070a12 100%);
-      overflow-x: hidden;
-    }
-    a { color: inherit; text-decoration: none; }
-    img { max-width: 100%; display: block; }
-    .container { width: min(1120px, 92vw); margin: 0 auto; }
-
-    /* ---------- Fancy Background Orbs ---------- */
-    .orb {
-      position: absolute; inset: auto; border-radius: 999px;
-      filter: blur(50px); opacity: .55; pointer-events: none;
-      transform: translate3d(0,0,0);
-      animation: float 10s ease-in-out infinite;
-      mix-blend-mode: screen;
-    }
-    .orb.one { width: 420px; height: 420px; left: -140px; top: 120px; background: rgba(255,125,0,.38); }
-    .orb.two { width: 380px; height: 380px; right: -120px; top: 180px; background: rgba(90,170,255,.32); animation-delay: -3s; }
-    .orb.three { width: 460px; height: 460px; left: 45%; bottom: -220px; background: rgba(170,90,255,.28); animation-delay: -6s; }
-    @keyframes float {
-      0%, 100% { transform: translateY(0) translateX(0) scale(1); }
-      50% { transform: translateY(-18px) translateX(10px) scale(1.03); }
-    }
-
-    /* ---------- Glass UI Tokens ---------- */
-    :root{
-      --glass: rgba(255,255,255,.08);
-      --glass-2: rgba(255,255,255,.06);
-      --stroke: rgba(255,255,255,.14);
-      --stroke-2: rgba(255,255,255,.10);
-      --shadow: 0 18px 60px rgba(0,0,0,.35);
-      --shadow-soft: 0 12px 30px rgba(0,0,0,.28);
-      --orange: #ff7a18;
-      --blue: #4aa3ff;
-      --purple: #b56bff;
-      --text: rgba(255,255,255,.88);
-      --muted: rgba(255,255,255,.68);
-    }
-
-    /* ---------- Subtle Grain ---------- */
-    .grain{
-      position: fixed; inset: 0; pointer-events: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.10'/%3E%3C/svg%3E");
-      opacity: .18;
-      mix-blend-mode: overlay;
-    }
-
-    /* ---------- Navbar ---------- */
-    .nav-wrap{
-      position: sticky; top: 0; z-index: 50;
-      backdrop-filter: blur(14px);
-      background: linear-gradient(180deg, rgba(7,10,18,.75), rgba(7,10,18,.20));
-      border-bottom: 1px solid rgba(255,255,255,.08);
-    }
-    .nav{
-      display:flex; align-items:center; justify-content:space-between;
-      padding: 14px 0;
-    }
-    .brand{
-      display:flex; align-items:center; gap: 10px;
-      letter-spacing: .2px;
-    }
-    .logo{
-      width: 36px; height: 36px; border-radius: 12px;
-      background: radial-gradient(14px 14px at 30% 30%, rgba(255,255,255,.55), transparent 55%),
-                  linear-gradient(135deg, rgba(255,122,24,.9), rgba(181,107,255,.75));
-      box-shadow: 0 14px 30px rgba(0,0,0,.35);
-      border: 1px solid rgba(255,255,255,.20);
-      position: relative;
-      overflow: hidden;
-    }
-    .logo::after{
-      content:""; position:absolute; inset:-40%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,.35), transparent);
-      transform: rotate(25deg) translateX(-40%);
-      animation: shine 4.8s ease-in-out infinite;
-      opacity: .7;
-    }
-    @keyframes shine{
-      0%, 30% { transform: rotate(25deg) translateX(-60%); }
-      55% { transform: rotate(25deg) translateX(60%); }
-      100% { transform: rotate(25deg) translateX(60%); }
-    }
-    .brand h1{ margin:0; font-size: 14.5px; font-weight: 750; }
-    .brand p{ margin:0; font-size: 12px; color: var(--muted); }
-
-    .links{ display:flex; gap: 14px; align-items:center; }
-    .links a{
-      padding: 9px 12px;
-      border-radius: 12px;
-      color: rgba(255,255,255,.76);
-      border: 1px solid transparent;
-      transition: transform .22s ease, background .22s ease, border-color .22s ease, color .22s ease;
-    }
-    .links a:hover{
-      transform: translateY(-2px);
-      background: rgba(255,255,255,.06);
-      border-color: rgba(255,255,255,.12);
-      color: rgba(255,255,255,.92);
-    }
-
-    .cta{
-      display:flex; gap: 10px; align-items:center;
-    }
-    .btn{
-      padding: 10px 14px;
-      border-radius: 14px;
-      border: 1px solid rgba(255,255,255,.16);
-      background: rgba(255,255,255,.06);
-      box-shadow: var(--shadow-soft);
-      transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease, background .22s ease;
-      display:inline-flex; align-items:center; gap: 10px;
-      font-weight: 650;
-      font-size: 13px;
-      white-space: nowrap;
-    }
-    .btn:hover{
-      transform: translateY(-2px);
-      border-color: rgba(255,255,255,.22);
-      background: rgba(255,255,255,.08);
-      box-shadow: 0 18px 46px rgba(0,0,0,.38);
-    }
-    .btn.primary{
-      border-color: rgba(255,122,24,.45);
-      background: linear-gradient(135deg, rgba(255,122,24,.22), rgba(181,107,255,.14));
-      position: relative;
-      overflow:hidden;
-    }
-    .btn.primary::after{
-      content:""; position:absolute; inset:-40%;
-      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.22), transparent 55%);
-      transform: translateX(-15%) translateY(-10%);
-      transition: transform .35s ease;
-    }
-    .btn.primary:hover::after{ transform: translateX(10%) translateY(0%); }
-    .pill{
-      font-size: 12px;
-      padding: 5px 9px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.16);
-      background: rgba(255,255,255,.06);
-      color: rgba(255,255,255,.78);
-    }
-
-    /* ---------- Sections ---------- */
-    section{ padding: 64px 0; position: relative; }
-    .grid{
-      display:grid;
-      grid-template-columns: repeat(12, 1fr);
-      gap: 18px;
-    }
-
-    .card{
-      border-radius: 22px;
-      background: linear-gradient(180deg, var(--glass), var(--glass-2));
-      border: 1px solid var(--stroke);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(14px);
-      overflow:hidden;
-      position: relative;
-    }
-    .card::before{
-      content:""; position:absolute; inset: -1px;
-      background: radial-gradient(420px 220px at 20% 0%, rgba(255,122,24,.18), transparent 60%),
-                  radial-gradient(420px 220px at 90% 10%, rgba(74,163,255,.14), transparent 60%),
-                  radial-gradient(420px 260px at 60% 100%, rgba(181,107,255,.12), transparent 60%);
-      opacity: .8;
-      pointer-events:none;
-    }
-    .card > *{ position: relative; z-index: 1; }
-    .pad{ padding: 22px; }
-
-    .kicker{
-      display:flex; gap: 10px; align-items:center; flex-wrap:wrap;
-      margin-bottom: 10px;
-    }
-    .dot{
-      width: 9px; height: 9px; border-radius: 999px;
-      background: var(--orange);
-      box-shadow: 0 0 0 6px rgba(255,122,24,.10);
-    }
-    .title{
-      margin: 8px 0 10px;
-      font-size: clamp(28px, 3.6vw, 46px);
-      line-height: 1.05;
-      letter-spacing: -0.6px;
-      font-weight: 850;
-    }
-    .subtitle{
-      margin: 0;
-      color: var(--muted);
-      font-size: 15.5px;
-      line-height: 1.65;
-    }
-
-    /* ---------- Hero ---------- */
-    .hero{ padding-top: 36px; }
-    .hero-left{ grid-column: 1 / span 7; }
-    .hero-right{ grid-column: 8 / span 5; }
-
-    .hero-stats{
-      display:grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-      margin-top: 18px;
-    }
-    .stat{
-      padding: 14px 14px;
-      border-radius: 18px;
-      border: 1px solid var(--stroke-2);
-      background: rgba(255,255,255,.04);
-      transition: transform .22s ease, border-color .22s ease, background .22s ease;
-    }
-    .stat:hover{
-      transform: translateY(-2px);
-      border-color: rgba(255,255,255,.18);
-      background: rgba(255,255,255,.06);
-    }
-    .stat b{ display:block; font-size: 18px; letter-spacing: -.2px; }
-    .stat span{ font-size: 12.5px; color: var(--muted); }
-
-    .hero-actions{
-      display:flex; gap: 12px; align-items:center; flex-wrap:wrap;
-      margin-top: 18px;
-    }
-
-    .profile{
-      display:flex; gap: 14px; align-items:center;
-      padding: 18px;
-      border-bottom: 1px solid rgba(255,255,255,.08);
-    }
-    .avatar{
-      width: 52px; height: 52px; border-radius: 18px;
-      border: 1px solid rgba(255,255,255,.18);
-      background:
-        radial-gradient(18px 18px at 30% 30%, rgba(255,255,255,.45), transparent 55%),
-        linear-gradient(135deg, rgba(74,163,255,.45), rgba(255,122,24,.35));
-      box-shadow: 0 18px 36px rgba(0,0,0,.35);
-    }
-    .profile h3{ margin:0; font-size: 14.5px; font-weight: 800; }
-    .profile p{ margin:2px 0 0; color: var(--muted); font-size: 12.5px; }
-    .mini{
-      padding: 18px;
-      display:grid;
-      gap: 12px;
-    }
-    .mini .row{
-      display:flex; justify-content:space-between; gap: 12px;
-      padding: 12px 12px;
-      border-radius: 16px;
-      border: 1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.04);
-      transition: transform .2s ease, border-color .2s ease;
-    }
-    .mini .row:hover{ transform: translateY(-2px); border-color: rgba(255,255,255,.18); }
-    .mini .row span{ color: var(--muted); font-size: 12.5px; }
-    .mini .row b{ font-size: 12.8px; }
-
-    /* ---------- Section Headings ---------- */
-    .section-head{
-      display:flex; align-items:flex-end; justify-content:space-between;
-      gap: 14px; margin-bottom: 18px;
-    }
-    .section-head h2{
-      margin:0;
-      font-size: 22px;
-      font-weight: 850;
-      letter-spacing: -0.3px;
-    }
-    .section-head p{ margin:0; color: var(--muted); font-size: 13.5px; }
-
-    /* ---------- Skills Chips ---------- */
-    .chips{
-      display:flex; flex-wrap:wrap; gap: 10px;
-    }
-    .chip{
-      padding: 10px 12px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.05);
-      font-size: 13px;
-      color: rgba(255,255,255,.80);
-      transition: transform .18s ease, background .18s ease, border-color .18s ease;
-    }
-    .chip:hover{
-      transform: translateY(-2px);
-      background: rgba(255,255,255,.07);
-      border-color: rgba(255,122,24,.30);
-    }
-
-    /* ---------- Project Cards ---------- */
-    .projects .card{ transition: transform .22s ease, border-color .22s ease; }
-    .projects .card:hover{ transform: translateY(-4px); border-color: rgba(255,255,255,.20); }
-    .proj{
-      display:flex; flex-direction:column; gap: 12px;
-    }
-    .tagrow{ display:flex; gap: 8px; flex-wrap:wrap; }
-    .tag{
-      font-size: 12px;
-      padding: 6px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.04);
-      color: rgba(255,255,255,.76);
-    }
-    .proj h3{ margin:0; font-size: 16px; font-weight: 850; letter-spacing:-.15px; }
-    .proj p{ margin:0; color: var(--muted); font-size: 13.5px; line-height: 1.6; }
-    .proj .footer{
-      display:flex; justify-content:space-between; align-items:center; gap: 12px;
-      margin-top: 6px;
-    }
-    .arrow{
-      width: 38px; height: 38px; border-radius: 14px;
-      border: 1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.05);
-      display:grid; place-items:center;
-      transition: transform .2s ease, border-color .2s ease;
-    }
-    .projects .card:hover .arrow{ transform: translateX(3px); border-color: rgba(255,122,24,.35); }
-
-    /* ---------- Timeline ---------- */
-    .timeline{
-      display:grid; gap: 12px;
-    }
-    .step{
-      padding: 14px 14px;
-      border-radius: 18px;
-      border: 1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.04);
-      display:flex; gap: 12px;
-      transition: transform .2s ease, border-color .2s ease;
-    }
-    .step:hover{ transform: translateY(-2px); border-color: rgba(255,255,255,.18); }
-    .step .num{
-      width: 34px; height: 34px; border-radius: 14px;
-      border: 1px solid rgba(255,255,255,.16);
-      display:grid; place-items:center;
-      background: linear-gradient(135deg, rgba(255,122,24,.20), rgba(74,163,255,.10));
-      font-weight: 850;
-      color: rgba(255,255,255,.86);
-      flex: 0 0 auto;
-    }
-    .step b{ display:block; font-size: 13.5px; }
-    .step span{ color: var(--muted); font-size: 12.8px; line-height: 1.55; }
-
-    /* ---------- Footer / Contact ---------- */
-    .contact{
-      display:grid; grid-template-columns: 1.2fr .8fr; gap: 14px;
-    }
-    .field{
-      width:100%;
-      padding: 12px 14px;
-      border-radius: 16px;
-      border: 1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.05);
-      color: rgba(255,255,255,.90);
-      outline: none;
-      transition: border-color .18s ease, transform .18s ease, background .18s ease;
-    }
-    .field:focus{
-      border-color: rgba(255,122,24,.35);
-      background: rgba(255,255,255,.06);
-      transform: translateY(-1px);
-    }
-    textarea.field{ min-height: 120px; resize: vertical; }
-
-    .foot{
-      padding: 26px 0 36px;
-      color: rgba(255,255,255,.60);
-      font-size: 12.5px;
-    }
-
-    /* ---------- Responsive ---------- */
-    @media (max-width: 980px){
-      .hero-left{ grid-column: 1 / -1; }
-      .hero-right{ grid-column: 1 / -1; }
-      .hero-stats{ grid-template-columns: repeat(3, 1fr); }
-      .contact{ grid-template-columns: 1fr; }
-      .links{ display:none; }
-    }
-    @media (max-width: 520px){
-      .hero-stats{ grid-template-columns: 1fr; }
-      .btn{ width: 100%; justify-content:center; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Manish Kumar Vishwakarma — AWS Cloud & DevOps Engineer portfolio.">
+<title>Manish Kumar Vishwakarma | AWS Cloud & DevOps</title>
+<style>
+:root{
+  --bg:#060816;
+  --bg2:#0b1024;
+  --text:#eef2ff;
+  --muted:#aab4d0;
+  --line:rgba(255,255,255,.12);
+  --glass:rgba(255,255,255,.065);
+  --glass2:rgba(255,255,255,.095);
+  --accent:#7c8cff;
+  --accent2:#55e6c1;
+  --accent3:#c084fc;
+  --shadow:0 24px 80px rgba(0,0,0,.38);
+  --radius:24px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  color:var(--text); background:
+    radial-gradient(circle at 15% 10%,rgba(124,140,255,.18),transparent 28%),
+    radial-gradient(circle at 85% 18%,rgba(85,230,193,.11),transparent 25%),
+    radial-gradient(circle at 55% 75%,rgba(192,132,252,.09),transparent 28%),
+    var(--bg);
+  line-height:1.6; overflow-x:hidden;
+}
+body:before{
+  content:"";position:fixed;inset:0;pointer-events:none;opacity:.28;
+  background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),
+                   linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
+  background-size:42px 42px;mask-image:linear-gradient(to bottom,black,transparent 85%);
+}
+a{color:inherit;text-decoration:none}
+.container{width:min(1160px,92%);margin:auto}
+.nav{
+  position:fixed;top:18px;left:50%;transform:translateX(-50%);z-index:20;
+  width:min(1100px,92%);padding:12px 16px;border:1px solid var(--line);
+  background:rgba(8,12,30,.62);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  border-radius:999px;box-shadow:0 12px 50px rgba(0,0,0,.25);
+}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;gap:20px}
+.logo{font-weight:800;letter-spacing:-.04em}.logo span{color:var(--accent2)}
+.nav-links{display:flex;gap:5px;align-items:center}
+.nav-links a{padding:9px 13px;color:var(--muted);font-size:.9rem;border-radius:999px;transition:.25s}
+.nav-links a:hover{color:var(--text);background:rgba(255,255,255,.08)}
+.nav-cta{padding:9px 15px;border-radius:999px;background:var(--text);color:#070918;font-weight:750;font-size:.86rem}
+.hero{min-height:100vh;display:grid;place-items:center;padding:150px 0 80px;position:relative}
+.hero-grid{display:grid;grid-template-columns:1.25fr .75fr;gap:70px;align-items:center}
+.eyebrow{display:inline-flex;align-items:center;gap:9px;padding:7px 12px;border:1px solid var(--line);background:var(--glass);border-radius:999px;color:#cdd5ef;font-size:.82rem;margin-bottom:22px}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--accent2);box-shadow:0 0 18px var(--accent2);animation:pulse 2s infinite}
+@keyframes pulse{50%{opacity:.45;transform:scale(.75)}}
+h1{font-size:clamp(3.3rem,7vw,6.5rem);line-height:.94;letter-spacing:-.075em;max-width:850px}
+.gradient{background:linear-gradient(110deg,#fff 5%,#9eaaff 48%,#55e6c1 90%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{font-size:1.12rem;color:var(--muted);max-width:700px;margin:25px 0 32px}
+.actions{display:flex;gap:12px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:9px;padding:13px 18px;border-radius:14px;border:1px solid var(--line);transition:.3s;cursor:pointer}
+.btn.primary{background:var(--text);color:#070918;font-weight:800}
+.btn.secondary{background:var(--glass);color:var(--text)}
+.btn:hover{transform:translateY(-4px);box-shadow:0 15px 35px rgba(0,0,0,.25);border-color:rgba(255,255,255,.25)}
+.hero-card{
+  position:relative;min-height:390px;border:1px solid var(--line);border-radius:32px;background:linear-gradient(145deg,rgba(255,255,255,.11),rgba(255,255,255,.035));
+  backdrop-filter:blur(18px);box-shadow:var(--shadow);padding:25px;overflow:hidden;transform:rotate(2deg);
+}
+.hero-card:before{content:"";position:absolute;width:220px;height:220px;border-radius:50%;background:var(--accent);filter:blur(80px);opacity:.18;top:-80px;right:-60px}
+.terminal{height:100%;min-height:335px;border:1px solid var(--line);background:rgba(0,0,0,.25);border-radius:22px;padding:20px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:#c9d2ee;font-size:.84rem}
+.terminal-top{display:flex;gap:7px;margin-bottom:22px}.terminal-top i{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.25)}
+.prompt{color:var(--accent2)}.cmd{color:#fff}.comment{color:#687394}.key{color:#9eaaff}
+section{padding:110px 0}
+.section-head{display:flex;justify-content:space-between;align-items:end;gap:30px;margin-bottom:40px}
+.kicker{color:var(--accent2);font-size:.8rem;text-transform:uppercase;letter-spacing:.18em;font-weight:800}
+h2{font-size:clamp(2.1rem,4vw,3.4rem);line-height:1;letter-spacing:-.055em;margin-top:10px}
+.section-head p{max-width:480px;color:var(--muted)}
+.glass{
+  border:1px solid var(--line);background:var(--glass);backdrop-filter:blur(16px);border-radius:var(--radius);
+  box-shadow:var(--shadow);transition:.35s;
+}
+.glass:hover{transform:translateY(-7px);background:var(--glass2);border-color:rgba(255,255,255,.2)}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.about-card{padding:30px}.about-card p{color:var(--muted);margin-bottom:16px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:22px}
+.stat{padding:20px;border:1px solid var(--line);border-radius:18px;background:rgba(0,0,0,.13)}
+.stat strong{display:block;font-size:1.8rem}.stat span{color:var(--muted);font-size:.82rem}
+.skills{display:flex;flex-wrap:wrap;gap:9px;margin-top:20px}
+.chip{padding:9px 12px;border:1px solid var(--line);border-radius:999px;color:#d9e0f5;background:rgba(255,255,255,.04);font-size:.83rem;transition:.25s}
+.chip:hover{transform:translateY(-3px);border-color:rgba(85,230,193,.5);color:#fff}
+.timeline{display:grid;gap:16px}
+.timeline-card{padding:27px;display:grid;grid-template-columns:170px 1fr;gap:25px}
+.date{color:var(--accent2);font-size:.83rem;font-weight:750}
+.role{font-size:1.25rem;font-weight:800}.company{color:#c2cbea;margin:2px 0 12px}
+.timeline-card ul{padding-left:18px;color:var(--muted)}.timeline-card li{margin:5px 0}
+.projects{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+.project{padding:27px;min-height:260px;position:relative;overflow:hidden}
+.project-number{font-size:.78rem;color:var(--accent2);font-family:monospace}
+.project h3{font-size:1.35rem;margin:30px 0 10px}.project p{color:var(--muted);font-size:.92rem}
+.project:after{content:"↗";position:absolute;right:24px;top:22px;font-size:1.4rem;color:#7f89a9;transition:.3s}
+.project:hover:after{transform:translate(4px,-4px);color:var(--accent2)}
+.project:hover h3{color:#fff}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.cert,.edu{padding:25px}.cert strong,.edu strong{display:block;font-size:1.05rem}.cert span,.edu span{color:var(--muted);font-size:.88rem}
+.contact{padding:50px;text-align:center;position:relative;overflow:hidden}
+.contact:before{content:"";position:absolute;width:400px;height:220px;border-radius:50%;background:var(--accent3);filter:blur(110px);opacity:.12;left:50%;top:-100px;transform:translateX(-50%)}
+.contact p{color:var(--muted);max-width:620px;margin:14px auto 28px}
+footer{padding:35px 0 50px;color:#727c9a;font-size:.82rem;text-align:center}
+.reveal{opacity:0;transform:translateY(25px);transition:opacity .7s ease,transform .7s ease}.reveal.show{opacity:1;transform:none}
+@media(max-width:850px){
+  .nav-links{display:none}.hero-grid,.about-grid,.two-col{grid-template-columns:1fr}.hero{padding-top:130px}
+  .hero-card{max-width:650px;width:100%;margin:auto}.projects{grid-template-columns:1fr}.timeline-card{grid-template-columns:1fr;gap:8px}
+  .section-head{display:block}.section-head p{margin-top:18px}.stats{grid-template-columns:1fr}
+}
+@media(max-width:520px){
+  section{padding:80px 0}.hero p{font-size:1rem}.contact{padding:32px 20px}
+  .actions .btn{width:100%;justify-content:center}.hero-card{min-height:330px}.terminal{min-height:275px}
+}
+</style>
 </head>
-
 <body>
-  <div class="orb one"></div>
-  <div class="orb two"></div>
-  <div class="orb three"></div>
-  <div class="grain"></div>
 
-  <!-- NAV -->
-  <div class="nav-wrap">
-    <div class="container nav">
-      <a class="brand" href="#top" aria-label="Home">
-        <div class="logo" aria-hidden="true"></div>
-        <div>
-          <h1>Shubham Londhe</h1>
-          <p>TrainWithShubham • DevOps • AWS • Agentic AI</p>
-        </div>
-      </a>
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="logo" href="#top">MK<span>.</span></a>
+    <div class="nav-links">
+      <a href="#about">About</a><a href="#experience">Experience</a><a href="#projects">Projects</a><a href="#skills">Skills</a>
+    </div>
+    <a class="nav-cta" href="#contact">Let's connect</a>
+  </div>
+</nav>
 
-      <div class="links" aria-label="Navigation links">
-        <a href="#about">About</a>
-        <a href="#skills">Skills</a>
-        <a href="#projects">Projects</a>
-        <a href="#talks">Talks</a>
-        <a href="#content">Content</a>
-        <a href="#contact">Contact</a>
+<main id="top">
+<section class="hero">
+  <div class="container hero-grid">
+    <div class="reveal">
+      <div class="eyebrow"><span class="dot"></span> AWS Cloud & DevOps Engineer · Delhi NCR</div>
+      <h1>Cloud infrastructure that <span class="gradient">ships.</span></h1>
+      <p>AWS Certified Solutions Architect focused on scalable cloud infrastructure, Kubernetes, Docker, Terraform, CI/CD and reliable production systems.</p>
+      <div class="actions">
+        <a class="btn primary" href="#projects">Explore my work ↗</a>
+        <a class="btn secondary" href="mailto:manish2801kumar@gmail.com">Email me</a>
+        <a class="btn secondary" href="https://www.linkedin.com/in/mkkumar88/" target="_blank" rel="noopener">LinkedIn ↗</a>
       </div>
-
-      <div class="cta">
-        <span class="pill">Open to: Talks • Collabs • Workshops</span>
-        <a class="btn primary" href="#contact">
-          <span>Let’s build</span>
-          <span aria-hidden="true">↗</span>
-        </a>
+    </div>
+    <div class="hero-card reveal">
+      <div class="terminal">
+        <div class="terminal-top"><i></i><i></i><i></i></div>
+        <div><span class="prompt">$</span> <span class="cmd">kubectl get infrastructure</span></div>
+        <br>
+        <div><span class="key">cloud</span>: AWS</div>
+        <div><span class="key">orchestration</span>: Kubernetes / EKS</div>
+        <div><span class="key">iac</span>: Terraform</div>
+        <div><span class="key">delivery</span>: GitHub Actions / Jenkins</div>
+        <div><span class="key">gitops</span>: Argo CD</div>
+        <div><span class="key">observability</span>: Prometheus / Grafana</div>
+        <br>
+        <div><span class="comment"># reliability matters</span></div>
+        <div><span class="prompt">status</span>: <span class="cmd">99.9% availability</span></div>
+        <div><span class="prompt">deployments</span>: <span class="cmd">automated</span></div>
+        <div><span class="prompt">infra</span>: <span class="cmd">as code</span></div>
       </div>
     </div>
   </div>
+</section>
 
-  <!-- HERO -->
-  <main id="top" class="container hero">
-    <section class="grid" style="padding-bottom: 0;">
-      <div class="hero-left">
-        <div class="kicker">
-          <span class="dot" aria-hidden="true"></span>
-          <span class="pill">Developer Advocate • Educator • Founder</span>
-          <span class="pill">AWS • Kubernetes • Platform Engineering</span>
-        </div>
-
-        <h2 class="title">
-          I help engineers go from <span style="color: rgba(255,122,24,.95);">Zero</span> to
-          <span style="color: rgba(74,163,255,.95);">Hero</span> in DevOps — with JOSH - real projects, real systems.
-        </h2>
-
-        <p class="subtitle">
-          Building <b>TrainWithShubham</b> — a community-first learning brand for DevOps, Cloud, and modern delivery.
-          I speak, teach, and ship production-ready workflows: CI/CD, Kubernetes, security gates, and agentic automation.
-        </p>
-
-        <div class="hero-actions">
-          <a class="btn primary" href="#projects">View projects <span aria-hidden="true">→</span></a>
-          <a class="btn" href="#content">Watch content <span aria-hidden="true">▶</span></a>
-          <a class="btn" href="#contact">Invite for a talk <span aria-hidden="true">🎤</span></a>
-        </div>
-
-        <div class="hero-stats" aria-label="Highlights">
-          <div class="stat">
-            <b>130K+ YouTube</b>
-            <span>TrainWithShubham learners</span>
-          </div>
-          <div class="stat">
-            <b>85K+ LinkedIn</b>
-            <span>Tech community network</span>
-          </div>
-          <div class="stat">
-            <b>10+ Batches</b>
-            <span>Mentorship + paid cohorts</span>
-          </div>
-        </div>
+<section id="about">
+<div class="container">
+  <div class="section-head reveal"><div><div class="kicker">01 / Profile</div><h2>Build reliable.<br>Automate everything.</h2></div><p>My focus sits at the intersection of cloud operations, DevOps automation and production reliability.</p></div>
+  <div class="about-grid">
+    <div class="glass about-card reveal">
+      <p>I'm Manish Kumar Vishwakarma, an AWS Certified Solutions Architect and cloud/DevOps professional with hands-on experience supporting and deploying scalable applications.</p>
+      <p>My work spans AWS, Linux, containers, Kubernetes, infrastructure as code, CI/CD, GitOps and monitoring — with a practical focus on reducing deployment friction and improving availability.</p>
+      <div class="stats">
+        <div class="stat"><strong>99.9%</strong><span>System availability</span></div>
+        <div class="stat"><strong>70%</strong><span>Deployment-time reduction</span></div>
+        <div class="stat"><strong>20%</strong><span>Cloud infrastructure cost reduction</span></div>
       </div>
-
-      <div class="hero-right">
-        <div class="card">
-          <div class="profile">
-            <div class="avatar" aria-hidden="true"></div>
-            <div>
-              <h3>Shubham Londhe</h3>
-              <p>Founder, TrainWithShubham • DevRel • DevOps & Cloud</p>
-            </div>
-          </div>
-
-          <div class="mini">
-            <div class="row">
-              <span>Signature series</span>
-              <b>DevOps – Zero To Hero</b>
-            </div>
-            <div class="row">
-              <span>Current obsession</span>
-              <b>Production Kubernetes + Observability</b>
-            </div>
-            <div class="row">
-              <span>Next frontier</span>
-              <b>Agentic AI for DevOps workflows</b>
-            </div>
-            <div class="row">
-              <span>Style</span>
-              <b>Simple, hands-on, no fluff</b>
-            </div>
-
-            <div class="hero-actions" style="margin-top: 2px;">
-              <a class="btn" href="#contact">Work with me <span aria-hidden="true">🤝</span></a>
-              <a class="btn" href="#about">Read bio <span aria-hidden="true">↓</span></a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ABOUT -->
-    <section id="about">
-      <div class="section-head">
-        <div>
-          <h2>About</h2>
-          <p>Short story. Big mission. Long-term mindset.</p>
-        </div>
-        <span class="pill">Based in India • Global audience</span>
-      </div>
-
-      <div class="grid">
-        <div class="card pad" style="grid-column: 1 / span 7;">
-          <p class="subtitle" style="margin-top:0;">
-            I’m a DevOps educator & DevRel professional, known for making complex topics feel easy — without dumbing them down.
-            My focus is building engineers who can ship: <b>CI/CD</b>, <b>Kubernetes</b>, <b>AWS</b>, security gates, and real observability.
-          </p>
-          <p class="subtitle">
-            I’ve helped thousands of learners (freshers + experienced) improve resumes, crack interviews, and build portfolio-grade projects.
-            My north-star is simple: <b>turn learning into leverage</b> — in career, confidence, and income.
-          </p>
-
-          <div class="chips" style="margin-top:14px;">
-            <span class="chip">Community-first teaching</span>
-            <span class="chip">Hands-on projects</span>
-            <span class="chip">Career clarity</span>
-            <span class="chip">Modern DevOps mindset</span>
-            <span class="chip">Builder energy</span>
-          </div>
-        </div>
-
-        <div class="card pad" style="grid-column: 8 / span 5;">
-          <div class="section-head" style="margin-bottom: 10px;">
-            <h2 style="font-size:18px;">What I bring</h2>
-            <p>For teams & audiences</p>
-          </div>
-
-          <div class="timeline">
-            <div class="step">
-              <div class="num">1</div>
-              <div>
-                <b>Clarity-first engineering</b>
-                <span>Break messy systems into shippable steps.</span>
-              </div>
-            </div>
-            <div class="step">
-              <div class="num">2</div>
-              <div>
-                <b>Production patterns</b>
-                <span>CI/CD, GitOps, security gates, and reliability basics.</span>
-              </div>
-            </div>
-            <div class="step">
-              <div class="num">3</div>
-              <div>
-                <b>Developer experience</b>
-                <span>Make tools lovable. Reduce friction. Increase output.</span>
-              </div>
-            </div>
-            <div class="step">
-              <div class="num">4</div>
-              <div>
-                <b>Storytelling that converts</b>
-                <span>Talks, workshops, content — built for outcomes.</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- SKILLS -->
-    <section id="skills">
-      <div class="section-head">
-        <div>
-          <h2>Skills</h2>
-          <p>Tech I use to build and teach production reality.</p>
-        </div>
-        <span class="pill">DevOps • Cloud • Platform • AI</span>
-      </div>
-
-      <div class="grid">
-        <div class="card pad" style="grid-column: 1 / span 6;">
-          <h3 style="margin:0 0 10px; font-size:16px; font-weight:850;">Cloud & Kubernetes</h3>
-          <div class="chips">
-            <span class="chip">AWS (EKS, IAM, VPC, S3)</span>
-            <span class="chip">Kubernetes</span>
-            <span class="chip">Helm</span>
-            <span class="chip">Argo CD (GitOps)</span>
-            <span class="chip">Terraform</span>
-          </div>
-        </div>
-
-        <div class="card pad" style="grid-column: 7 / span 6;">
-          <h3 style="margin:0 0 10px; font-size:16px; font-weight:850;">CI/CD & Security</h3>
-          <div class="chips">
-            <span class="chip">GitHub Actions</span>
-            <span class="chip">Jenkins</span>
-            <span class="chip">Docker</span>
-            <span class="chip">Trivy</span>
-            <span class="chip">OWASP Dependency Check</span>
-            <span class="chip">SonarQube Quality Gates</span>
-          </div>
-        </div>
-
-        <div class="card pad" style="grid-column: 1 / span 12;">
-          <h3 style="margin:0 0 10px; font-size:16px; font-weight:850;">Observability & Agentic Automation</h3>
-          <div class="chips">
-            <span class="chip">Prometheus</span>
-            <span class="chip">Grafana</span>
-            <span class="chip">Logging/Tracing basics</span>
-            <span class="chip">Agentic AI for DevOps (tools + workflows)</span>
-            <span class="chip">Automation mindset</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- PROJECTS -->
-    <section id="projects" class="projects">
-      <div class="section-head">
-        <div>
-          <h2>Featured Projects</h2>
-          <p>Portfolio-worthy systems with real DevOps depth.</p>
-        </div>
-        <span class="pill">Swap these with your real links</span>
-      </div>
-
-      <div class="grid">
-        <a class="card pad" href="#" style="grid-column: 1 / span 4;">
-          <div class="proj">
-            <div class="tagrow">
-              <span class="tag">EKS</span><span class="tag">GitOps</span><span class="tag">Observability</span>
-            </div>
-            <h3>Kubernetes → Production Blueprint</h3>
-            <p>Terraform + EKS setup, Helm add-ons, GitOps CD, and monitoring — designed like a real platform.</p>
-            <div class="footer">
-              <span class="pill">Case study</span>
-              <span class="arrow" aria-hidden="true">↗</span>
-            </div>
-          </div>
-        </a>
-
-        <a class="card pad" href="#" style="grid-column: 5 / span 4;">
-          <div class="proj">
-            <div class="tagrow">
-              <span class="tag">CI/CD</span><span class="tag">Security</span><span class="tag">Quality Gates</span>
-            </div>
-            <h3>Secure CI Pipeline System</h3>
-            <p>Build → scan → gate → publish → deploy flow with Trivy + OWASP + SonarQube quality gates.</p>
-            <div class="footer">
-              <span class="pill">Repo</span>
-              <span class="arrow" aria-hidden="true">↗</span>
-            </div>
-          </div>
-        </a>
-
-        <a class="card pad" href="#" style="grid-column: 9 / span 4;">
-          <div class="proj">
-            <div class="tagrow">
-              <span class="tag">Agentic AI</span><span class="tag">DevOps</span><span class="tag">Automation</span>
-            </div>
-            <h3>AI DevOps Helper</h3>
-            <p>Automate routine DevOps tasks with tool-using agents: triage, docs, and runbook generation.</p>
-            <div class="footer">
-              <span class="pill">Demo</span>
-              <span class="arrow" aria-hidden="true">↗</span>
-            </div>
-          </div>
-        </a>
-      </div>
-    </section>
-
-    <!-- TALKS -->
-    <section id="talks">
-      <div class="section-head">
-        <div>
-          <h2>Talks & Workshops</h2>
-          <p>High-energy sessions that move people from theory to shipping.</p>
-        </div>
-        <span class="pill">Invite me • Keynotes • Colleges • Communities</span>
-      </div>
-
-      <div class="grid">
-        <div class="card pad" style="grid-column: 1 / span 6;">
-          <h3 style="margin:0 0 10px; font-size:16px; font-weight:850;">Popular session themes</h3>
-          <div class="timeline">
-            <div class="step"><div class="num">A</div><div><b>DevOps Roadmap 2026</b><span>What to learn, what to build, how to stand out.</span></div></div>
-            <div class="step"><div class="num">B</div><div><b>Kubernetes for Real Teams</b><span>From pods to production patterns.</span></div></div>
-            <div class="step"><div class="num">C</div><div><b>Modern CI/CD + DevSecOps</b><span>Quality gates, vulnerability scanning, GitOps.</span></div></div>
-          </div>
-        </div>
-
-        <div class="card pad" style="grid-column: 7 / span 6;">
-          <h3 style="margin:0 0 10px; font-size:16px; font-weight:850;">Why audiences love it</h3>
-          <div class="chips">
-            <span class="chip">Hands-on, not slides-only</span>
-            <span class="chip">Beginner-friendly clarity</span>
-            <span class="chip">Production examples</span>
-            <span class="chip">Actionable takeaways</span>
-            <span class="chip">Career angle included</span>
-          </div>
-          <p class="subtitle" style="margin-top:12px;">
-            Want a session tailored to your audience (college / fresher / team / leadership)? Ping me.
-          </p>
-          <div class="hero-actions" style="margin-top:12px;">
-            <a class="btn primary" href="#contact">Request a session <span aria-hidden="true">→</span></a>
-            <a class="btn" href="#projects">See builds <span aria-hidden="true">🧩</span></a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- CONTENT -->
-    <section id="content">
-      <div class="section-head">
-        <div>
-          <h2>Content Engine</h2>
-          <p>YouTube + LinkedIn + Community — consistent value.</p>
-        </div>
-        <span class="pill">TrainWithShubham</span>
-      </div>
-
-      <div class="grid">
-        <div class="card pad" style="grid-column: 1 / span 4;">
-          <h3 style="margin:0 0 10px; font-size:16px; font-weight:850;">YouTube</h3>
-          <p class="subtitle">Long-form tutorials, one-shots, and project builds for DevOps & Cloud.</p>
-          <div class="chips" style="margin-top:12px;">
-            <span class="chip">DevOps One Shot</span>
-            <span class="chip">Kubernetes</span>
-            <span class="chip">AWS</span>
-          </div>
-        </div>
-
-        <div class="card pad" style="grid-column: 5 / span 4;">
-          <h3 style="margin:0 0 10px; font-size:16px; font-weight:850;">LinkedIn</h3>
-          <p class="subtitle">Storytelling + practical posts that convert attention into action.</p>
-          <div class="chips" style="margin-top:12px;">
-            <span class="chip">Career growth</span>
-            <span class="chip">DevOps tips</span>
-            <span class="chip">Build-in-public</span>
-          </div>
-        </div>
-
-        <div class="card pad" style="grid-column: 9 / span 4;">
-          <h3 style="margin:0 0 10px; font-size:16px; font-weight:850;">Community</h3>
-          <p class="subtitle">Weekly engagement, builder rewards, and project-driven learning.</p>
-          <div class="chips" style="margin-top:12px;">
-            <span class="chip">Challenges</span>
-            <span class="chip">Mentorship</span>
-            <span class="chip">Review culture</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- CONTACT -->
-    <section id="contact">
-      <div class="section-head">
-        <div>
-          <h2>Contact</h2>
-          <p>Let’s collaborate — workshops, consulting, product dev, or community partnerships.</p>
-        </div>
-        <span class="pill">Fast replies • Clear outcomes</span>
-      </div>
-
-      <div class="grid">
-        <div class="card pad" style="grid-column: 1 / span 7;">
-          <form onsubmit="event.preventDefault(); alert('Form demo only. Connect this to your backend or a form service.');">
-            <div class="contact">
-              <input class="field" placeholder="Your name" required />
-              <input class="field" placeholder="Email" type="email" required />
-            </div>
-            <div style="height:12px;"></div>
-            <input class="field" placeholder="What do you want to build together?" required />
-            <div style="height:12px;"></div>
-            <textarea class="field" placeholder="Tell me the context: audience / goal / timeline / budget..."></textarea>
-            <div style="height:12px;"></div>
-            <button class="btn primary" type="submit">Send message <span aria-hidden="true">→</span></button>
-            <span style="display:inline-block; margin-left:10px; color: var(--muted); font-size: 12.5px;">
-              Tip: Replace this with Formspree / Google Form / your API.
-            </span>
-          </form>
-        </div>
-
-        <div class="card pad" style="grid-column: 8 / span 5;">
-          <h3 style="margin:0 0 10px; font-size:16px; font-weight:850;">Quick links</h3>
-          <div class="timeline">
-            <a class="step" href="#">
-              <div class="num">Y</div>
-              <div><b>YouTube</b><span>TrainWithShubham channel</span></div>
-            </a>
-            <a class="step" href="#">
-              <div class="num">L</div>
-              <div><b>LinkedIn</b><span>Posts, newsletters, updates</span></div>
-            </a>
-            <a class="step" href="#">
-              <div class="num">G</div>
-              <div><b>GitHub</b><span>Projects and learning repos</span></div>
-            </a>
-            <a class="step" href="#">
-              <div class="num">W</div>
-              <div><b>Workshops</b><span>Corporate / college sessions</span></div>
-            </a>
-          </div>
-
-          <div class="hero-actions" style="margin-top: 14px;">
-            <a class="btn" href="#top">Back to top <span aria-hidden="true">↑</span></a>
-            <a class="btn primary" href="#projects">See my work <span aria-hidden="true">↗</span></a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <div class="foot container">
-      © <span id="year"></span> Shubham Londhe • Built with glassmorphism + clean motion • <span style="color:rgba(255,122,24,.85)">TrainWithShubham</span>
     </div>
-  </main>
+    <div class="glass about-card reveal" id="skills">
+      <div class="kicker">Core stack</div>
+      <div class="skills">
+        <span class="chip">AWS</span><span class="chip">Terraform</span><span class="chip">Kubernetes / EKS</span><span class="chip">Docker</span>
+        <span class="chip">GitHub Actions</span><span class="chip">Jenkins</span><span class="chip">GitLab</span><span class="chip">Argo CD</span>
+        <span class="chip">Prometheus</span><span class="chip">Grafana</span><span class="chip">Linux</span><span class="chip">CI/CD</span>
+        <span class="chip">GitOps</span><span class="chip">Infrastructure as Code</span><span class="chip">System Monitoring</span>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
 
-  <script>
-    document.getElementById("year").textContent = new Date().getFullYear();
+<section id="experience">
+<div class="container">
+  <div class="section-head reveal"><div><div class="kicker">02 / Experience</div><h2>Where I've<br>made impact.</h2></div></div>
+  <div class="timeline">
+    <article class="glass timeline-card reveal">
+      <div class="date">OCT 2024 — JUN 2026</div>
+      <div><div class="role">AWS Cloud Support Staff</div><div class="company">MMTTCC, Ramanujan College · New Delhi</div>
+      <ul><li>Supported a UGC-backed LMS serving hundreds of faculty members, scholars and resource persons.</li><li>Maintained 99.9% availability through proactive system and Kubernetes health monitoring.</li><li>Troubleshot Linux, Kubernetes clusters and pods while improving application and infrastructure reliability.</li></ul></div>
+    </article>
+    <article class="glass timeline-card reveal">
+      <div class="date">OCT 2022 — DEC 2025</div>
+      <div><div class="role">Cloud Support Engineer</div><div class="company">TLC, Ramanujan College · Govindpuri Kalkaji</div>
+      <ul><li>Built and deployed the RCMOOCS learning management system with scalable, secure and automated practices.</li><li>Reduced deployment time by 70%, improved uptime and reduced cloud infrastructure cost by 20%.</li></ul></div>
+    </article>
+    <article class="glass timeline-card reveal">
+      <div class="date">2013 — 2015</div>
+      <div><div class="role">Software Intern</div><div class="company">PNS, IIC, UDSC · University of Delhi</div>
+      <ul><li>Worked on Delhi University websites and ERP portals, including front-end/back-end development.</li><li>Deployed applications on Linux servers and worked with security and firewall administration.</li></ul></div>
+    </article>
+  </div>
+</div>
+</section>
 
-    // tiny "magnetic hover" for buttons (feels premium)
-    const magnets = document.querySelectorAll(".btn");
-    magnets.forEach(btn => {
-      btn.addEventListener("mousemove", (e) => {
-        const r = btn.getBoundingClientRect();
-        const x = e.clientX - r.left - r.width / 2;
-        const y = e.clientY - r.top - r.height / 2;
-        btn.style.transform = `translateY(-2px) translate(${x * 0.04}px, ${y * 0.08}px)`;
-      });
-      btn.addEventListener("mouseleave", () => {
-        btn.style.transform = "";
-      });
-    });
-  </script>
+<section id="projects">
+<div class="container">
+  <div class="section-head reveal"><div><div class="kicker">03 / Selected work</div><h2>Projects built<br>to prove it.</h2></div><p>Production-minded projects spanning cloud, containers, GitOps, CI/CD and application infrastructure.</p></div>
+  <div class="projects">
+    <article class="glass project reveal"><span class="project-number">01 · LMS / 3-TIER</span><h3>RCMOOCS Learning Management System</h3><p>Django-based LMS deployed with Docker and Kubernetes, with GitHub Actions CI/CD, Prometheus and Grafana for delivery and observability.</p><div class="skills"><span class="chip">Django</span><span class="chip">Docker</span><span class="chip">Kubernetes</span><span class="chip">CI/CD</span></div></article>
+    <article class="glass project reveal"><span class="project-number">02 · BANKING / MICROSERVICES</span><h3>AI BankApp</h3><p>Three-tier application architecture designed around containerization, Kubernetes, GitOps deployment, load balancing and resilient application delivery.</p><div class="skills"><span class="chip">Docker</span><span class="chip">Kubernetes</span><span class="chip">GitOps</span><span class="chip">Load Balancing</span></div></article>
+    <article class="glass project reveal"><span class="project-number">03 · ERP / AWS</span><h3>Production-ready Odoo 19 Architecture</h3><p>A production-focused AWS architecture concept emphasizing high availability, security, scalability, DevOps and GitOps practices.</p><div class="skills"><span class="chip">AWS</span><span class="chip">RDS</span><span class="chip">ALB</span><span class="chip">EFS</span><span class="chip">WAF</span></div></article>
+    <article class="glass project reveal"><span class="project-number">04 · AUTOMATION / IAC</span><h3>Cloud Automation & DevSecOps</h3><p>Reusable infrastructure and delivery workflows using Terraform, GitHub Actions and security tooling to automate provisioning, testing and deployment.</p><div class="skills"><span class="chip">Terraform</span><span class="chip">GitHub Actions</span><span class="chip">Trivy</span><span class="chip">Gitleaks</span></div></article>
+  </div>
+</div>
+</section>
+
+<section>
+<div class="container">
+  <div class="section-head reveal"><div><div class="kicker">04 / Credentials</div><h2>Certifications &<br>education.</h2></div></div>
+  <div class="two-col">
+    <div class="glass cert reveal"><strong>AWS Certified Solutions Architect</strong><span>AWS · Cloud architecture certification</span></div>
+    <div class="glass cert reveal"><strong>AWS Cloud Solution Architect</strong><span>Cloud architecture credential listed on LinkedIn profile</span></div>
+    <div class="glass edu reveal"><strong>Master of Computer Applications — MCA</strong><span>Bharati Vidyapeeth Deemed University, Pune · Information Technology</span></div>
+    <div class="glass edu reveal"><strong>Bachelor of Computer Applications — BCA</strong><span>Sharda Group of Institutions · Information Technology</span></div>
+  </div>
+</div>
+</section>
+
+<section id="contact">
+<div class="container">
+  <div class="glass contact reveal">
+    <div class="kicker">05 / Contact</div>
+    <h2>Let's build something<br><span class="gradient">reliable.</span></h2>
+    <p>I'm open to cloud, DevOps and AWS-focused opportunities where I can help automate infrastructure, improve reliability and ship better systems.</p>
+    <div class="actions" style="justify-content:center">
+      <a class="btn primary" href="mailto:manish2801kumar@gmail.com">manish2801kumar@gmail.com ↗</a>
+      <a class="btn secondary" href="https://www.linkedin.com/in/mkkumar88/" target="_blank" rel="noopener">LinkedIn ↗</a>
+    </div>
+  </div>
+</div>
+</section>
+</main>
+
+<footer>© 2026 Manish Kumar Vishwakarma · AWS Cloud & DevOps</footer>
+
+<script>
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('show'); });
+},{threshold:.12});
+document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+
+document.querySelectorAll('.glass').forEach(card=>{
+  card.addEventListener('mousemove', e=>{
+    const r=card.getBoundingClientRect();
+    const x=(e.clientX-r.left)/r.width-.5, y=(e.clientY-r.top)/r.height-.5;
+    card.style.transform=`translateY(-7px) perspective(900px) rotateX(${y*-2}deg) rotateY(${x*2}deg)`;
+  });
+  card.addEventListener('mouseleave', ()=>card.style.transform='');
+});
+</script>
 </body>
 </html>
+'''
+
+path = Path("/mnt/data/manish-portfolio.html")
+path.write_text(html, encoding="utf-8")
+print(path)
